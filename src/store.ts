@@ -1,3 +1,5 @@
+import { get } from "http";
+import { atom } from "jotai"; 
 // Standard interface and functions
 export interface Todo {
   id: number;
@@ -28,3 +30,12 @@ export const addTodo = (todos: Todo[], text: string): Todo[] => [
     done: false,
   },
 ];
+
+export const newTodoAtom = atom<string>("");
+export const todosAtom = atom<Todo[]>([]);
+export const addTodoAtom = atom(
+  ()=>"", 
+(get,set)=>{
+  set(todosAtom, addTodo(get(todosAtom), get(newTodoAtom)));
+  set(newTodoAtom, "");
+})
